@@ -44,7 +44,6 @@ export const handler = awsLambdaRequestHandler({
         //     'Access-Control-Allow-Origin': 'http://localhost:3000',
         //     'Access-Control-Allow-Credentials': true,
         //   },
-          
         // }) // no context
 // })
 

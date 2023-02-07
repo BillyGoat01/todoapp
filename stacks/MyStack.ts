@@ -1,7 +1,16 @@
-import { StackContext, Api, StaticSite } from "@serverless-stack/resources";
+import { StackContext, Api, StaticSite, use } from "@serverless-stack/resources";
+import { Database } from "./Database";
+
+
 
 export function MyStack({ stack }: StackContext) {
+  const rds = use(Database)
   const api = new Api(stack, "api", {
+    defaults: {
+      function: {
+        bind: [rds],
+      },
+    },
     cors: true,
     routes: {
       "GET /todo/{proxy+}": "functions/lambda.handler",
