@@ -1,6 +1,7 @@
 export * as Todo from "./todo"
 import {ulid} from "ulid"
 import { PG } from "./pg" 
+import { Row } from "./pg"
 
 
 export async function create(task: string, complete_by: string, completed:boolean) {
@@ -13,13 +14,13 @@ export async function create(task: string, complete_by: string, completed:boolea
 
 
 export function get(todoID: string){
-    return PG.DB.selectFrom("todo")
+    return PG.DB.selectFrom('todo')
     .selectAll()
     .where("todoID", "=", todoID)
     .executeTakeFirst();
 }
 
-export function list() {
+ export function list() {
     return PG.DB.selectFrom("todo")
     .selectAll()
     .orderBy("todoID")

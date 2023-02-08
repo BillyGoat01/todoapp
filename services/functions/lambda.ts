@@ -1,31 +1,53 @@
-import {  APIGatewayProxyEventV2 } from "aws-lambda";
-
-import { CreateAWSLambdaContextOptions, awsLambdaRequestHandler } from '@trpc/server/adapters/aws-lambda';
+import { awsLambdaRequestHandler } from '@trpc/server/adapters/aws-lambda';
 import { initTRPC } from '@trpc/server';
-import { z } from 'zod';
+import { any, z } from 'zod';
+import { Todo } from "../core/todo"
+import { PG } from 'core/pg';
+import { Row } from 'core/pg';
+
 
 const t = initTRPC.create();
 
 const appRouter = t.router({
-  greeting: t.procedure
-  .input(
+  Todos: t.procedure
+    .query(() => {
+      // console.log(Todo.list())
+      return Todo.list()
+    }),
+  postTask: t.procedure
+    .input(
       z.object({
-        name:  z.string(),
-        })
+        task: z.string(),
+        completed_by: z.string(),
+        completed: z.boolean(),
+      })
     )
-    .query((req) => {
-      req.input
-    return { 
-        text: `Hello ${req.input?.name ?? 'world'}`
-    };
-  }),
-});
+    .mutation(({ input }) => {
+      return Todo.create(input.task, input.completed_by, input.completed)
+    })
+})
 
+
+
+
+
+// greeting: t.procedure
+// .input(
+//     z.object({
+//       name:  z.string(),
+//       })
+//   )
+//   .query((req) => {
+//     req.input
+//   return { 
+//       text: `Hello ${req.input?.name ?? 'world'}`
+//   };
+// }),
 export type AppRouter = typeof appRouter;
 
 export const handler = awsLambdaRequestHandler({
   router: appRouter,
-}) 
+})
 // greetings: t.procedure
 // .input(
   //   z.object({
@@ -34,7 +56,7 @@ export const handler = awsLambdaRequestHandler({
     // )
     // .query(({input}) => {
       //   return {
-        //     name: 
+        //     name:
         //   }
         // const createContext = ({
         //   event,

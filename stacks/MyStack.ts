@@ -14,6 +14,7 @@ export function MyStack({ stack }: StackContext) {
     cors: true,
     routes: {
       "GET /todo/{proxy+}": "functions/lambda.handler",
+      "POST /todo/{proxy+}": "functions/lambda.handler",
     },
   });
 
