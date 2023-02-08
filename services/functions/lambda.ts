@@ -1,6 +1,6 @@
 import { awsLambdaRequestHandler } from '@trpc/server/adapters/aws-lambda';
 import { initTRPC } from '@trpc/server';
-import { any, z } from 'zod';
+import { z } from 'zod';
 import { Todo } from "../core/todo"
 import { PG } from 'core/pg';
 import { Row } from 'core/pg';
@@ -14,6 +14,14 @@ const appRouter = t.router({
       // console.log(Todo.list())
       return Todo.list()
     }),
+    getATask: t.procedure
+    .input(
+      z.object({
+        todoid: z.string()
+      })
+  ).query(({input}) =>{
+    return Todo.getatask(input.todoid)
+  }),
   postTask: t.procedure
     .input(
       z.object({
@@ -24,6 +32,23 @@ const appRouter = t.router({
     )
     .mutation(({ input }) => {
       return Todo.create(input.task, input.completed_by, input.completed)
+    }),
+    deleteTask: t.procedure
+    .input(
+      z.object({
+        todoid: z.string(),
+      })
+    ).mutation(({input}) => {
+      return Todo.deletetask(input.todoid)
+    }),
+    completedTask: t.procedure
+    .input(
+      z.object({
+        todoid: z.string(),
+        completed: z.boolean()
+      })
+    ).mutation(({input}) => {
+      return Todo.complete(input.todoid, input.completed )
     })
 })
 

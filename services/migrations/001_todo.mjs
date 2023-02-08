@@ -6,9 +6,9 @@ import { Kysely } from "kysely";
 export async function up(db) {
   await db.schema
     .createTable("todo")
-    .addColumn("todoID", "varchar", col => col.primaryKey())
+    .addColumn("todoid", "varchar", col => col.primaryKey())
     .addColumn("task", "varchar", col => col.notNull())
-    .addColumn("complete_by", "date", col => col.notNull())
+    .addColumn("complete_by", "varchar", col => col.notNull())
     .addColumn("completed", "boolean", col => col.defaultTo(false))
     .execute();
 

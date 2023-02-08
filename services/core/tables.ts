@@ -6,9 +6,9 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 
 export interface Todo {
-    todoID: string;
+    todoid: string;
     task: string;
-    complete_by: ColumnType<Date, string | undefined, never>
+    complete_by: string,
     completed: boolean
   }
   
