@@ -12,18 +12,23 @@ function Home() {
     const { control, handleSubmit, reset } = useForm()
 
 
-    const del = trpc.deleteTask.useMutation()
-    const com = trpc.completedTask.useMutation()
+    const del = trpc.deleteTask.useMutation({
+        onSuccess: () => {
+            refetch();
+        }
+        })
+    const com = trpc.completedTask.useMutation({
+        onSuccess: () => {
+            refetch();
+        }
+        })
 
-
-   
 
     // deletes a task and refetches for some reason the refetch takes forever
     const delTask = async (id: string) => {
         del.mutate({
             todoid: id
         })
-        refetch()
         refetch()
     };
 
@@ -33,13 +38,12 @@ function Home() {
             todoid: id,
             completed: true
         })
-        refetch()
     }
 
     if (isLoading) return <div>Loading...</div>;
     return (
         <>
-            <Navbar/>
+            <Navbar refetch={refetch}/>
             <form>
                 <div style={{ textAlign: "center" }}>
                     <table className="table">

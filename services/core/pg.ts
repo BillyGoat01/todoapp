@@ -5,6 +5,7 @@ import { DataApiDialect } from "kysely-data-api";
 import type { Database } from "./tables"
 
 
+// connects RDS DB to kysley
 export const DB = new Kysely<Database>({
     dialect: new DataApiDialect({
         mode: "postgres",

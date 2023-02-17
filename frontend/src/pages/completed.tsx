@@ -5,14 +5,21 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Completed() {
     const { isLoading, data, refetch } = trpc.Todos.useQuery()
-    const com = trpc.completedTask.useMutation()
+    const com = trpc.completedTask.useMutation({
+        onSuccess: () => {
+          refetch();
+        }
+        })
+
     const navigate = useNavigate()
 
-    useEffect(()=> {
-        refetch()
-    }, [data])
 
-    //completes a task and moves it to the completed page
+
+    // useEffect(()=> {
+    //     refetch()
+    // }, [data])
+
+    //completes a task and moves it to the completed page, also calls nav to take you back to the todolist
     const uncompleteTask = (id: string) => {
         com.mutate({
             todoid: id,
@@ -20,10 +27,12 @@ function Completed() {
         })
         nav()
     }
+
+    //navigates back to todolist
     const nav = () => {
-        setTimeout(() => {
+        // setTimeout(() => {
            navigate(`/todo`)
-        }, 1000)
+        // }, 1000)
     }
 
     return (

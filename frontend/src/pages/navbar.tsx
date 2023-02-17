@@ -7,7 +7,11 @@ function Navbar(props: any) {
     const [task, setTask] = useState("")
     const [completedby, setCompleteby] = useState("")
 
-    const postTodo = trpc.postTask.useMutation()
+    const postTodo = trpc.postTask.useMutation({
+        onSuccess: () => {
+          props.refetch();
+        }
+        })
 
 
     let navigate = useNavigate()
@@ -22,9 +26,9 @@ function Navbar(props: any) {
             })
             setTask("")
             setCompleteby("")
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000)
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 1000)
 
         } else {
             alert('texbox not filled in')

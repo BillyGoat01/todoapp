@@ -6,6 +6,7 @@ import { Database } from "./Database";
 export function MyStack({ stack }: StackContext) {
   const rds = use(Database)
   const api = new Api(stack, "api", {
+    // binding rds database to api
     defaults: {
       function: {
         bind: [rds],
@@ -13,6 +14,7 @@ export function MyStack({ stack }: StackContext) {
     },
     cors: true,
     routes: {
+      // Any post and get calls are to directed to lamda.handler routes
       "GET /todo/{proxy+}": "functions/lambda.handler",
       "POST /todo/{proxy+}": "functions/lambda.handler",
     },
@@ -22,6 +24,7 @@ export function MyStack({ stack }: StackContext) {
     path: "frontend",
     buildCommand: "npm run build", // or "yarn build"
     environment: {
+      // url that will let you call api on the back end
       REACT_APP_API_URL: api.url,
     },
   });

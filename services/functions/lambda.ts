@@ -9,11 +9,12 @@ import { Row } from 'core/pg';
 const t = initTRPC.create();
 
 const appRouter = t.router({
+  //route that get all tasks
   Todos: t.procedure
     .query(() => {
-      // console.log(Todo.list())
       return Todo.list()
     }),
+    //route gets a singular task
     getATask: t.procedure
     .input(
       z.object({
@@ -22,6 +23,7 @@ const appRouter = t.router({
   ).query(({input}) =>{
     return Todo.getatask(input.todoid)
   }),
+  // Route creates a task
   postTask: t.procedure
     .input(
       z.object({
@@ -33,6 +35,7 @@ const appRouter = t.router({
     .mutation(({ input }) => {
       return Todo.create(input.task, input.completed_by, input.completed)
     }),
+    // Route deletes task
     deleteTask: t.procedure
     .input(
       z.object({
@@ -41,6 +44,7 @@ const appRouter = t.router({
     ).mutation(({input}) => {
       return Todo.deletetask(input.todoid)
     }),
+    // sets task to true (comleted) or false (not completed)
     completedTask: t.procedure
     .input(
       z.object({
